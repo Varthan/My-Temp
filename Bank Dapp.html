@@ -1,0 +1,266 @@
+<html>
+<title>Transfer</title>
+<body>
+<center>
+<h1>Bank Application</h1>
+
+<div>
+<h3>Balance</h3>
+<input type="text" id="ad" placeholder="Address"/>
+<input type="button" onclick=bal() value="check"/>
+</div><br><br>
+
+<div>
+<h3>TotelSupply</h3>
+<input type="text" id="ts" placeholder="amount"/>
+<input type="button" onclick=totsup() value="Enter"/>
+</div><br><br>
+
+<div>
+<h3>Mint (Totalsupply 1000. so, mint limit is 1000)</h3>
+<input type="text" id="m_amt" placeholder="amount"/>
+<input type="button" onclick=mint() value="Enter"/>
+</div><br><br>
+
+<div>
+<h3>Transfer</h3>
+<input type="text" id="to_ad" placeholder="Receiver address"/>
+<input type="text" id="t_amt" placeholder="Amount"/>
+<input type="button" onclick=trans() value="Enter"/>
+</div><br><br>
+
+<div>
+<h3>Transfer From</h3>
+<input type="text" id="s_ad" placeholder="sender address"/>
+<input type="text" id="r_ad" placeholder="Receiver address"/>
+<input type="text" id="amt" placeholder="Amount"/>
+<input type="button" onclick=transf() value="Enter"/>
+</div>
+
+</center>
+
+<script>
+var add=document.getElementById('ad');
+var limit=document.getElementById('ts');
+var min_amt=document.getElementById('m_amt');
+var to_add=document.getElementById('to_ad');
+var tran_amt=document.getElementById('t_amt');
+var s_add=document.getElementById('s_ad');
+var r_add=document.getElementById('r_ad');
+var amt=document.getElementById('amt');
+
+
+	web3.eth.defaultAccount = web3.eth.accounts[0];
+
+	var cont = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "totalsupply",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "amt",
+				"type": "uint256"
+			}
+		],
+		"name": "transferfrom",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amt",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "amt",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "balance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	}
+]);
+
+	var con_add = cont.at('0x20a5cc295ff7c65b8f79708d7c20feeee929b73b');
+
+	if(web3.isConnected()) 
+	{
+		console.log("Successfully Connected");
+	}
+	else
+	{
+		console.log("Not Connected");
+	}
+
+
+function totsup()
+{
+ return con_add.totalsupply(limit.value, function(error,result)
+	{
+		if(!error)
+			console.log(result);
+		else
+			console.log(error);
+	});
+}
+
+function mint()
+{
+ return con_add.mint(min_amt.value, function(error,result)
+	{
+		if(!error)
+			console.log(result);
+		else
+			console.log(error);
+	});
+}
+
+function trans()
+{
+ return con_add.transfer(to_add.value,tran_amt.value, function(error,result)
+	{
+		if(!error)
+			console.log(result);
+		else
+			console.log(error);
+	});
+}
+
+function transf()
+{
+ return con_add.transferfrom(s_add.value,r_add.value,amt.value, function(error,result)
+	{
+		if(!error)
+			console.log(result);
+		else
+			console.log(error);
+	});
+}
+
+function bal()
+{
+ return con_add.balance(add.value, function(error,result)
+	{
+		if(!error)
+		{
+			console.log(result);
+			alert(result);
+		}
+		else
+			console.log(error);
+	});
+}
+
+</script>
+
+</body>
+</html>
